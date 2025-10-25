@@ -23,9 +23,7 @@ logs/
 *.log
 npm-debug.log*
 
-# AI instruction files (contains sensitive information)
-.CLAUDE.md
-CLAUDE.md
+
 
 # Build outputs
 dist/
