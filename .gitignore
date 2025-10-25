@@ -30,3 +30,7 @@ CLAUDE.md
 # Build outputs
 dist/
 build/
+
+
+# Backups
+.backups/
