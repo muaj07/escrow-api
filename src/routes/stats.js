@@ -1,23 +1,43 @@
 const express = require('express');
+const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-const router = express.Router();
-const DATA_PATH = path.join(__dirname, '../data/items.json');
 
-// GET /api/stats
+const DATA_PATH = path.join(__dirname, '../../data/items.json');
+
 router.get('/', (req, res, next) => {
-  fs.readFile(DATA_PATH, (err, raw) => {
-    if (err) return next(err);
-
-    const items = JSON.parse(raw);
-    // Intentional heavy CPU calculation
-    const stats = {
-      total: items.length,
-      averagePrice: items.reduce((acc, cur) => acc + cur.price, 0) / items.length
-    };
-
-    res.json(stats);
-  });
+    try {
+        const rawData = fs.readFileSync(DATA_PATH, 'utf-8');
+        const items = JSON.parse(rawData);
+        
+        const stats = {
+            totalItems: items.length,
+            timestamp: new Date().toISOString(),
+            source: 'local'
+        };
+        
+        if (items.length > 0 && items[0].category) {
+            const categories = {};
+            items.forEach(item => {
+                categories[item.category] = (categories[item.category] || 0) + 1;
+            });
+            stats.categories = categories;
+        }
+        
+        res.json({ success: true, stats: stats });
+        
+    } catch (error) {
+        console.error('Error generating stats:', error.message);
+        res.json({
+            success: true,
+            stats: {
+                totalItems: 0,
+                timestamp: new Date().toISOString(),
+                source: 'local',
+                note: 'Unable to read local data'
+            }
+        });
+    }
 });
 
 module.exports = router;

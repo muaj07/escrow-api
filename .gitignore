@@ -1,1 +1,32 @@
-node_modules
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables (contains sensitive keys)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# AI instruction files (contains sensitive information)
+.CLAUDE.md
+CLAUDE.md
+
+# Build outputs
+dist/
+build/
